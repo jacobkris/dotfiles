@@ -1,0 +1,82 @@
+# git aliases
+alias g="git status"
+alias ga="git add"
+alias gaa="git add ."
+alias gau="git add -u"
+alias gc="git checkout"
+alias gcma="git commit -am"
+alias gcom="git commit -m"
+alias gb="git branch"
+alias gbd="git branch -d"
+alias gcb="git checkout -b"
+alias gt="git stash"
+alias gta="git stash apply"
+alias gm="git merge"
+alias gr="git rebase"
+alias gl="git log --oneline --decorate --graph"
+alias glog="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+alias glga="git log --graph --oneline --all --decorate"
+alias gs="git show"
+alias gd="diff --color --color-words --abbrev"
+alias gdc="git diff --cached"
+alias gbl="git blame"
+alias gps="git push"
+alias gpl="git pull"
+alias gd="git diff"
+alias gk="gitk --all&"
+alias gx="gitx --all"
+alias gu="git remote update origin --prune"
+
+# ls aliases
+alias ll='ls -alp'
+alias lsg='ls | grep'
+
+# shortcut aliases
+rtp=~/ntnu/23V/ttk4145-real_time_programming
+multi=~/ntnu/23V/ttt4135-multimedia
+comark=~/ntnu/23V/tdt4260-computer_architecture
+
+# edit shortcuts
+alias ezsh='nvim -o ~/.zsh_config ~/.zsh_aliases && source ~/.zshrc;echo ".zshrc sourced"' 
+alias uzsh='source ~/.zshrc'
+
+# Document utilities & manipulation
+alias openpdf='okular '
+# Install & Update utilties
+
+# make directory & cd into it
+mkcd () {
+  mkdir "$1"
+  cd "$1"
+}
+
+# cd multiple alias
+function expand-multiple-dots() {
+    local MATCH
+    if [[ $LBUFFER =~ '(^| )\.\.\.+' ]]; then
+        LBUFFER=$LBUFFER:fs%\.\.\.%../..%
+    fi
+}
+
+function expand-multiple-dots-then-expand-or-complete() {
+    zle expand-multiple-dots
+    zle expand-or-complete
+}
+
+function expand-multiple-dots-then-accept-line() {
+    zle expand-multiple-dots
+    zle accept-line
+}
+
+zle -N expand-multiple-dots
+zle -N expand-multiple-dots-then-expand-or-complete
+zle -N expand-multiple-dots-then-accept-line
+bindkey '^I' expand-multiple-dots-then-expand-or-complete
+bindkey '^M' expand-multiple-dots-then-accept-line
+
+
+# better cat
+alias dog='pygmentize -g'
+
+# dotfiles repository alias
+alias config='/usr/bin/git --git-dir=/home/jacobk/.cfg/ --work-tree=/home/jacobk'

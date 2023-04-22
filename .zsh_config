@@ -1,0 +1,11 @@
+# load version control system (vcs)
+autoload -Uz vcs_info
+precmd() { vcs_info } 
+# setting up git branch details
+zstyle ':vcs_info:git:*' formats '%b '
+
+# setup for prompt
+# NEWLINE=$'\n'
+# put this if want new line ->  ${NEWLINE}> 
+setopt PROMPT_SUBST
+PROMPT='%F{green}%* %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
