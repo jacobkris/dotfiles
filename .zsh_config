@@ -8,4 +8,8 @@ zstyle ':vcs_info:git:*' formats '%b '
 # NEWLINE=$'\n'
 # put this if want new line ->  ${NEWLINE}> 
 setopt PROMPT_SUBST
-PROMPT='%F{green}%* %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
+# PROMPT='%F{green}%* %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
+
+# make new promt with ssh name instead of time
+# i want space between ssh name and path
+PROMPT='%F{green}%n%f %F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
