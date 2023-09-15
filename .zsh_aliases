@@ -32,13 +32,17 @@ alias ll='ls -alp'
 alias lsg='ls | grep'
 
 # shortcut aliases
-rtp=~/ntnu/23V/ttk4145-real_time_programming
-multi=~/ntnu/23V/ttt4135-multimedia
-comarc=~/ntnu/23V/tdt4260-computer_architecture
+# rtp=~/ntnu/23V/ttk4145-real_time_programming
+# multi=~/ntnu/23V/ttt4135-multimedia
+# comarc=~/ntnu/23V/tdt4260-computer_architecture
+
+
 
 # edit shortcuts
 alias ezsh='nvim -o ~/.zsh_config ~/.zsh_aliases && source ~/.zshrc;echo ".zshrc sourced"' 
 alias uzsh='source ~/.zshrc'
+# edit zsh_aliases
+alias ezsha='nvim ~/.zsh_aliases && source ~/.zshrc;echo ".zshrc sourced"'
 
 # Document utilities & manipulation
 alias openpdf='okular '
@@ -96,3 +100,122 @@ function cd() {
   fi
 }
 
+alias d='dolphin .' # open dolphin in current directory
+
+# function change all spaces to underscores for all files in the current directory
+# usage: space_to_underscore
+function space_to_underscore() { 
+  for f in *; do mv "$f" `echo $f | tr ' ' '_'`; done
+}
+
+# function change all brackets to underscores for all files in the current directory
+function bracket_to_underscore() { 
+  for f in *; do mv "$f" `echo $f | tr '(' '_'`; done
+  for f in *; do mv "$f" `echo $f | tr ')' '_'`; done
+}
+
+# function to rename dots to underscores for all files in the current directory, excluding the extension
+function rename_dots_to_underscores() {
+    for file in ./*.*; do
+        # Strip the file extension
+        base=$(basename "$file")
+        ext="${base##*.}"
+        fname="${base%.*}"
+
+        # Replace dots with underscores in the filename
+        newfname="${fname//./_}"
+
+        # Rename the file with the new name and old extension
+        if [ "$fname" != "$newfname" ]; then
+            mv -- "$file" "${file%$base}$newfname.$ext"
+        fi
+    done
+}
+
+# change spaces,dashes,bracket and dots to underscores for all files in chosen directory
+rename_files() {
+    destination=$1
+
+    # Check if destination is empty or equals "/"
+    if [ -z "$destination" ] || [ "$destination" = "/" ]; then
+        echo "Error: No directory specified."
+        return
+    fi
+
+    # Get the number of files in the directory
+    file_count=$(find "$destination" -maxdepth 1 -type f | wc -l)
+
+    # Display the number of files
+    echo "Number of files in $destination: $file_count"
+
+    # Confirm with the user before proceeding
+    read -q "choice?Are you sure you want to rename all files in $destination? [y/N] "
+    echo
+
+    # Check user's choice
+    case "$choice" in
+        y|Y)
+            
+            # disable globbing
+            set -f
+
+            # User confirmed, perform file renaming
+            for file in "$destination"/*; do
+                # Extract the base filename and extension
+                base=${file##*/}
+                filename=${base%.*}
+                extension=${base##*.}
+                echo "Filename: $filename"
+
+                # remove curly brackets 
+                new_filename=${filename//\{/_}
+                new_filename=${new_filename//\}/_}
+                # remove spaces
+                new_filename=${new_filename// /_}
+                # remove dashes
+                new_filename=${new_filename//-/_}
+                # remove dots
+                new_filename=${new_filename//./_}
+                # remove commas
+                new_filename=${new_filename//,/_}
+                # remove brackets
+                new_filename=${new_filename//\(/_}
+                new_filename=${new_filename//\)/_}
+                # remove square brackets
+                new_filename=${new_filename//\[/_}
+                new_filename=${new_filename//\]/_}
+                # Remove leading underscore if present
+                new_filename=${new_filename##_}
+                # Remove underscore before the file extension
+                new_filename=${new_filename%_}.$extension
+                # remove double underscores
+                new_filename=${new_filename//__/_}
+                # Construct the new path
+                new_path="$destination/$new_filename"
+
+                # Check if the new path is different from the original path
+                if [[ "$file" != "$new_path" ]]; then
+                    # Rename the file
+                    mv "$file" "$new_path"
+                fi
+            done
+            set +f
+            echo "File renaming completed."
+            ;;
+        *)
+            echo "File renaming cancelled."
+            ;;
+    esac
+}
+
+
+# python virtual environment
+## create virtual environment
+function mkvenv() {
+  python -m venv --prompt "$1" .venv 
+}
+## activate virtual environment
+alias avenv='source .venv/bin/activate'
+    
+## install packages from requirements.txt
+alias pipi='pip install -r requirements.txt'
