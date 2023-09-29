@@ -219,3 +219,9 @@ alias avenv='source .venv/bin/activate'
     
 ## install packages from requirements.txt
 alias pipi='pip install -r requirements.txt'
+
+# xclip
+alias pbcopy='xclip -selection clipboard'
+
+# tmux
+alias tmux="TERM=screen-256color-bce tmux"

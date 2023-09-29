@@ -13,3 +13,5 @@ setopt PROMPT_SUBST
 # make new promt with ssh name instead of time
 # i want space between ssh name and path
 PROMPT='%F{green}%n%f %F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
+
+PATH="/usr/local/texlive/2023/bin/x86_64-linux:$PATH"
